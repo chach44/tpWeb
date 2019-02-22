@@ -1,6 +1,6 @@
 Rectangle.prototype.paint = function (ctx) {
     ctx.beginPath();
-    ctx.rect(this.x_initial, this.y_initial, this.x_final-this.x_initial, this.y_final-this.y_initial);
+    ctx.rect(this.x_initial, this.y_initial, this.x_final, this.y_final);
     ctx.stroke();
 };
 
@@ -22,7 +22,7 @@ Drawing.prototype.paint = function (ctx) {
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     this.getForms().forEach(function (eltDuTableau) {
         // now fill the canvas
-        console.log(eltDuTableau);
+        console.log(eltDuTableau); // NE S'AFFICHE PAS
         eltDuTableau.paint(ctx);
     });
 };
