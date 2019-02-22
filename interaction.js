@@ -9,28 +9,50 @@ function DnD(canvas, interactor) {
     var y_initial = 0;
     var y_final = 0;
 
-    // Developper les 3 fonctions gerant les evenements
-    this.mouseDownFunction = function(evt) {
-        var res = getMousePosition(canvas, evt);
-        x_initial= res.x;
-        y_initial= res.y;
-        console.log('Pression : x=' + x_initial + " y=" + y_initial);
-    }.bind(this) ;
-    
-    this.mouseMoveFunction = function(evt) {
-        var res = getMousePosition(canvas, evt);
-        x_final= res.x;
-        y_final= res.y;
-        //console.log('Deplacement : x=' + res.x + " y=" + res.y);
-    }.bind(this) ;
+    this.getXInit = function () {
+        return x_initial;
+    }
+    this.getYInit = function () {
+        return y_initial;
+    }
+    this.getXFinal = function () {
+        return x_final;
+    }
+    this.getYFinal = function () {
+        return y_final;
+    }
 
-    this.mouseUpFunction = function(evt) {
+    // Developper les 3 fonctions gerant les evenements
+    this.mouseDownFunction = function (evt) {
         var res = getMousePosition(canvas, evt);
-        x_final= res.x;
-        y_final= res.y;
+        x_initial = res.x;
+        y_initial = res.y;
+        console.log('Pression : x=' + x_initial + " y=" + y_initial);
+
+        //interactor.onInteractionStart(this);
+
+    }.bind(this);
+
+    this.mouseMoveFunction = function (evt) {
+        var res = getMousePosition(canvas, evt);
+        x_final = res.x;
+        y_final = res.y;
+        //console.log('Deplacement : x=' + res.x + " y=" + res.y);
+
+        //interactor.onInteractionUpdate(this);
+
+    }.bind(this);
+
+    this.mouseUpFunction = function (evt) {
+        var res = getMousePosition(canvas, evt);
+        x_final = res.x;
+        y_final = res.y;
         console.log('Relachement : x=' + x_final + " y=" + y_final);
-    }.bind(this) ;
-        
+
+        //interactor.onInteractionEnd(this);
+
+    }.bind(this);
+
     // Associer les fonctions precedentes aux evenements du canvas.
     canvas.addEventListener('mousedown', this.mouseDownFunction, false);
     canvas.addEventListener('mousemove', this.mouseMoveFunction, false);
