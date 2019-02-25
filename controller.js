@@ -7,11 +7,11 @@ function Pencil(ctx, drawing, canvas) {
     this.currColour = '#000000';
     this.currentShape = 0;
 
-    // Liez ici les widgets � la classe pour modifier les attributs pr�sents ci-dessus.
+    // Liez ici les widgets a la classe pour modifier les attributs presents ci-dessus.
 
     new DnD(canvas, this);
 
-    //forme créée (Rectangle ou Ligne) en fonction de l'attribut
+    //forme creee (Rectangle ou Ligne) en fonction de l'attribut
     this.onInteractionStart = function (DnD) {
         switch (this.currEditingMode) {
             case editingMode.rect: {
@@ -19,7 +19,7 @@ function Pencil(ctx, drawing, canvas) {
                 break;
             }
             case editingMode.line: {
-                this.currentShape = new Line(DnD.x_initial, DnD.y_initial, DnD.x_final, DnD.y_final, this.currLineWidth, this.currColour);
+                this.currentShape = new Line(DnD.x_initial, DnD.y_initial, DnD.x_initial, DnD.x_initial, this.currLineWidth, this.currColour);
                 break;
             }
         }

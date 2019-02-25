@@ -9,19 +9,6 @@ function DnD(canvas, interactor) {
     var y_initial = 0;
     var y_final = 0;
 
-    this.getXInit = function () {
-        return x_initial;
-    }
-    this.getYInit = function () {
-        return y_initial;
-    }
-    this.getXFinal = function () {
-        return x_final;
-    }
-    this.getYFinal = function () {
-        return y_final;
-    }
-
     // Developper les 3 fonctions gerant les evenements
     this.mouseDownFunction = function (evt) {
         var res = getMousePosition(canvas, evt);

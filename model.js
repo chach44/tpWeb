@@ -1,32 +1,39 @@
 
 function Drawing() {
-    var formAvailable = new Array();
-    formAvailable.push("Rectangle");
-    formAvailable.push("Line");
+    this.formAvailable = new Array();
+    this.formAvailable.push("Rectangle");
+    this.formAvailable.push("Line");
+
+    this.addForm = function(form) { 
+        this.formAvailable.push(form);
+    }.bind(this);
 
     this.getForms = function () {
-        return formAvailable;
-    }
+        return this.formAvailable;
+    }.bind(this);
 }
 
 function Form(newthickness, newcolor) {
-    Drawing.call(this);
-    var color = newcolor;
-    var thickness = newthickness;
+    this.color = newcolor;
+    this.thickness = newthickness;
 }
 
 function Rectangle(newX, newY, newWidth, newHeight, newthickness, newcolor) {
     Form.call(this, newthickness, newcolor);
-    var x_initial = newX;
-    var y_initial = newY;
-    var width = newWidth;
-    var height = newHeight;
+    this.x_initial = newX;
+    this.y_initial = newY;
+    this.width = newWidth;
+    this.height = newHeight;
+    console.log("RECTANGLE - x:"+this.x_initial+" y:"+this.y_initial+" width:"+this.width+" height:"+this.height+"color:"+this.color+" thickness:"+this.thickness);
 }
+Rectangle.prototype = new Form();
 
 function Line(newXInit, newYInit, newXFinal, newYFinal, newthickness, newcolor) {
     Form.call(this, newthickness, newcolor);
-    var x_initial = newXInit;
-    var y_initial = newYInit;
-    var x_final = newXFinal;
-    var y_final = newYFinal;
+    this.x_initial = newXInit;
+    this.y_initial = newYInit;
+    this.x_final = newXFinal;
+    this.y_final = newYFinal;
+    console.log("LINE - x:"+this.x_initial+" y:"+this.y_initial+" x:"+this.x_final+" y:"+this.y_final+"color:"+this.color+" thickness:"+this.thickness);
 }
+Line.prototype = new Form();
