@@ -1,55 +1,47 @@
 
-// La cretion d'un Dnd requiee un canvas et un interacteur.
-// L'interacteur viendra dans un second temps donc ne vous en souciez pas au depart.
 function DnD(canvas, interactor) {
-    // Definir ici les attributs de la 'class
-
     var x_initial = 0;
     var x_final = 0;
     var y_initial = 0;
     var y_final = 0;
+    var mousePress = false;
 
     // Developper les 3 fonctions gerant les evenements
     this.mouseDownFunction = function (evt) {
+        mousePress = true;
         var res = getMousePosition(canvas, evt);
-        x_initial = res.x;
-        y_initial = res.y;
-        console.log('Pression : x=' + x_initial + " y=" + y_initial);
+        this.x_initial = res.x;
+        this.y_initial = res.y;
+        interactor.onInteractionStart(this);
 
-        //interactor.onInteractionStart(this);
-
+        console.log("Pression : x=" + this.x_initial + " y=" + this.y_initial);
     }.bind(this);
 
     this.mouseMoveFunction = function (evt) {
-        var res = getMousePosition(canvas, evt);
-        x_final = res.x;
-        y_final = res.y;
-        //console.log('Deplacement : x=' + res.x + " y=" + res.y);
-
-        //interactor.onInteractionUpdate(this);
-
+        if (mousePress) {
+            var res = getMousePosition(canvas, evt);
+            this.x_final = res.x;
+            this.y_final = res.y;
+            interactor.onInteractionUpdate(this);
+            console.log("Deplacement : x=" + this.x_final + " y=" + this.y_final);
+        }
     }.bind(this);
 
-    this.mouseUpFunction = function (evt) {
-        var res = getMousePosition(canvas, evt);
-        x_final = res.x;
-        y_final = res.y;
-        console.log('Relachement : x=' + x_final + " y=" + y_final);
-
-        //interactor.onInteractionEnd(this);
-
+    this.mouseUpFunction = function () {
+        if (mousePress) {
+            interactor.onInteractionEnd(this);
+            mousePress = false;
+        }
     }.bind(this);
 
     // Associer les fonctions precedentes aux evenements du canvas.
-    canvas.addEventListener('mousedown', this.mouseDownFunction, false);
-    canvas.addEventListener('mousemove', this.mouseMoveFunction, false);
-    canvas.addEventListener('mouseup', this.mouseUpFunction, false);
+    canvas.addEventListener("mousedown", this.mouseDownFunction, false);
+    canvas.addEventListener("mousemove", this.mouseMoveFunction, false);
+    canvas.addEventListener("mouseup", this.mouseUpFunction, false);
 };
 
-
-// Place le point de l'evenement evt relativement a la position du canvas.
 function getMousePosition(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
+    this.rect = canvas.getBoundingClientRect();
     return {
         x: evt.clientX - rect.left,
         y: evt.clientY - rect.top

@@ -2,59 +2,100 @@
 var editingMode = { rect: 0, line: 1 };
 
 function Pencil(ctx, drawing, canvas) {
-    this.currEditingMode = editingMode.line;
-    this.currLineWidth = 5;
-    this.currColour = '#000000';
-    this.currentShape = 0;
+    var currEditingMode = editingMode.line;
+    var currLineWidth = 5;
+    var currColour = '#000000';
+    var currentShape = 0;
 
-    // Liez ici les widgets a la classe pour modifier les attributs presents ci-dessus.
+    //var myDND = new DnD(canvas, this);
 
-    new DnD(canvas, this);
-
-    //forme creee (Rectangle ou Ligne) en fonction de l'attribut
-    this.onInteractionStart = function (DnD) {
-        switch (this.currEditingMode) {
-            case editingMode.rect: {
-                this.currentShape = new Rectangle(DnD.x_initial, DnD.y_initial, 0, 0, this.currLineWidth, this.currColour);
-                break;
-            }
-            case editingMode.line: {
-                this.currentShape = new Line(DnD.x_initial, DnD.y_initial, DnD.x_initial, DnD.x_initial, this.currLineWidth, this.currColour);
-                break;
-            }
-        }
-        this.currentShape.paint(ctx);
-    }
-    //la mettre à jour lorsque l'utilisateur bouge la souris 
-    this.onInteractionUpdate = function (DnD) {
-        switch (this.currEditingMode) {
-            case editingMode.rect: {
-                this.currentShape = new Rectangle(DnD.x_initial, DnD.y_initial, DnD.x_final - DnD.x_initial, DnD.y_final - DnD.x_initial, this.currLineWidth, this.currColour);
-                break;
-            }
-            case editingMode.line: {
-                this.currentShape = new Line(DnD.x_initial, DnD.y_initial, DnD.x_final, DnD.y_final, this.currLineWidth, this.currColour);
-                break;
-            }
-        }
-        this.currentShape.paint(ctx);
+    this.currLineWidth = document.getElementById('spinnerWidth').value;
+    this.currColour = document.getElementById('colour').value;
+    if (document.getElementById('butRect').checked) {
+        this.currEditingMode = editingMode.rect;
+        console.log("Rectangle en cours ....");
+    } else if (document.getElementById('butLine').checked) {
+        this.currEditingMode = editingMode.line;
+        console.log("Line en cours ....");
     }
 
-    //l'ajouter au dessin lors du relâchement
-    this.onInteractionEnd = function (DnD) {
+    this.onInteractionStart = function (myDND) {
+        console.log("jhgfsdqdfrgthy " + myDND.x_initial);
         switch (this.currEditingMode) {
             case editingMode.rect: {
-                this.currentShape = new Rectangle(DnD.x_initial, DnD.y_initial, DnD.x_final - DnD.x_initial, DnD.y_final - DnD.x_initial, this.currLineWidth, this.currColour);
+                currentShape = new Rectangle(myDND.x_initial,
+                    myDND.y_initial,
+                    myDND.x_initial,
+                    myDND.y_initial,
+                    this.currLineWidth,
+                    this.currColour);
                 break;
             }
             case editingMode.line: {
-                this.currentShape = new Line(DnD.x_initial, DnD.y_initial, DnD.x_final, DnD.y_final, this.currLineWidth, this.currColour);
+                currentShape = new Line(myDND.x_initial,
+                    myDND.y_initial,
+                    myDND.x_initial,
+                    myDND.y_initial,
+                    this.currLineWidth,
+                    this.currColour);
                 break;
             }
         }
         this.currentShape.paint(ctx);
+    }.bind(this);
+
+    this.onInteractionUpdate = function (myDND) {
+        switch (this.currEditingMode) {
+            case editingMode.rect: {
+                currentShape = new Rectangle(myDND.x_initial,
+                    myDND.y_initial,
+                    myDND.x_final - myDND.x_initial,
+                    myDND.y_final - myDND.y_initial,
+                    this.currLineWidth,
+                    this.currColour);
+                break;
+            }
+            case editingMode.line: {
+                currentShape = new Line(myDND.x_initial,
+                    myDND.y_initial,
+                    myDND.x_final,
+                    myDND.y_final,
+                    this.currLineWidth,
+                    this.currColour);
+                break;
+            }
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawing.paint(ctx, canvas);
+        this.currentShape.paint(ctx, canvas);
+    }.bind(this);
+
+    this.onInteractionEnd = function (myDND) {
+        switch (this.currEditingMode) {
+            case editingMode.rect: {
+                currentShape = new Rectangle(myDND.x_initial,
+                    myDND.y_initial,
+                    myDND.x_final - myDND.x_initial,
+                    myDND.y_final - myDND.y_initial,
+                    this.currLineWidth,
+                    this.currColour);
+                break;
+            }
+            case editingMode.line: {
+                currentShape = new Line(myDND.x_initial,
+                    myDND.y_initial,
+                    myDND.x_final,
+                    myDND.y_final,
+                    this.currLineWidth,
+                    this.currColour);
+                break;
+            }
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        drawing.addShape(this.currentShape);
+        drawing.paint(ctx, canvas);
         this.currentShape = 0;
-    }
+    }.bind(this);
 };
 
 

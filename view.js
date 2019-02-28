@@ -1,7 +1,6 @@
 Rectangle.prototype.paint = function (ctx) {
     Form.prototype.paint.call(this, ctx);
     ctx.beginPath();
-    console.log("kjhgfds = "+this.x_initial);
     ctx.rect(this.x_initial, 
             this.y_initial, 
             this.width, 
